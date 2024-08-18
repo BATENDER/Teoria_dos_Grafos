@@ -8,11 +8,19 @@ int main() {
 
     printf("\n");
 
-    for (i = 0; i <= linha; i++) {
-        for (j = 0; j < i; j++)
-            printf(" ");
+    for (i = 1; i <= linha; i++) {
         for (j = linha - i; j >= 1; j--)
+            printf(" ");
+        for (j = 1; j <= i; j++)
             printf("*");
+        
+        printf(" ");
+
+        for (j = 1; j <= i; j++)
+            printf("*");
+        for (j = linha - i; j >= 1; j--)
+            printf(" ");
+
         printf("\n");
     }
     

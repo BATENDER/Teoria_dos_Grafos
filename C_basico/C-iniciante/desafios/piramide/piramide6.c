@@ -7,7 +7,7 @@ int main() {
     scanf("%d", &linha);
     printf("\n");
 
-    for (i = 1; i <= linha; i++) {
+    for (i = 0; i <= linha; i++) {
         for (j = linha - i; j >= 1; j--)
             printf("*");
         for (j = i; j <= i; j++)
