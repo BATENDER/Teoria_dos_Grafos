@@ -26,7 +26,7 @@ void dfs(int raiz , vertice * vertices);
 
 int main() {
 
-    int qtd_vertices, qtd_arestas,i,a,b;
+    int qtd_vertices, qtd_arestas, i, a, b, componentes = 0;
     
 
     vertice *vertices;
@@ -38,7 +38,7 @@ int main() {
     for(i=0;i<qtd_arestas;i++) {   
         scanf("%d %d",&a,&b);
         incluir_vertice_lista_adjacencia(&vertices[a],b);
-        // incluir_vertice_lista_adjacencia(&vertices[b],a);
+        incluir_vertice_lista_adjacencia(&vertices[b],a);
     }
 
     printf("Lista da Adjacencia: \n");
@@ -47,6 +47,16 @@ int main() {
         mostrar_lista(vertices[i].adj);
         printf("\n");
     }
+
+    for (i = 1; i <= qtd_vertices; i++) {
+        if (vertices[i].visitado == 0) {
+            dfs(i, vertices);
+            componentes += 1;
+        }
+    }
+
+    printf("\n");
+    printf("componentes : %d \n", componentes);
 
     printf("DFS: ");
     dfs(1,vertices);
