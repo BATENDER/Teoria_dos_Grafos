@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct vertice {
     struct lista *adj;
     int visitado;
+    int genero;
 } vertice;
 
 typedef struct lista {
@@ -24,47 +26,34 @@ void incluir_final(lista *l, int x);
 void incluir_vertice_lista_adjacencia(vertice *v, int valor);
 void dfs(int raiz , vertice * vertices);
 
+int check_genero(vertice *vevrtices, int qtd_vertices);
+
 int main() {
 
-    int qtd_vertices, qtd_arestas, i, a, b, componentes = 0;
+    int qtd_cenarios, qtd_vertices, qtd_arestas, i, a, b, componentes = 0;
     
+    scanf("%d", &qtd_cenarios);
 
-    vertice *vertices;
+    for (i = 1; i <= qtd_cenarios; i++) {
+        scanf("%d %d", &qtd_vertices, &qtd_arestas);
 
-    scanf("%d %d", &qtd_vertices, &qtd_arestas);
+        vertice *vertices = (vertice *)calloc(sizeof(vertice), qtd_vertices + 1);
 
-    vertices = (vertice *)calloc(sizeof(vertice), qtd_vertices + 1);
+        for (int j = 0; j < qtd_arestas; j++) {
+            scanf("%d %d", &a, &b);
 
-    for(i=0;i<qtd_arestas;i++) {   
-        scanf("%d %d",&a,&b);
-        incluir_vertice_lista_adjacencia(&vertices[a],b);
-        incluir_vertice_lista_adjacencia(&vertices[b],a);
-    }
-
-    printf("Lista da Adjacencia: \n");
-    for(i=1;i<=qtd_vertices;i++) {
-        printf("Vertice: %d -> ",i);
-        mostrar_lista(vertices[i].adj);
-        printf("\n");
-    }
-
-    for (i = 1; i <= qtd_vertices; i++) {
-        if (vertices[i].visitado == 0) {
-            dfs(i, vertices);
-            componentes += 1;
+            incluir_vertice_lista_adjacencia(&vertices[a], b);
+            incluir_vertice_lista_adjacencia(&vertices[b], a);
         }
+
+        int sus = check_genero(vertices, qtd_vertices);
+
+        printf("\n\nCenario #%d : \n", i);
+        if (sus % 2 == 0)
+            printf("Inseto suspeito detectado!\n");
+        else
+            printf("Nenhum inseto suspeito detectado!\n");
     }
-
-    printf("\n");
-    printf("componentes : %d \n", componentes);
-
-    printf("DFS: ");
-    dfs(1,vertices);
-
-    if ((qtd_arestas == qtd_vertices - 1) && (componentes == 1))
-        printf("\nSIM! \n");
-    else
-        printf("\nNAO! \n");
 
     return 0;
 }
@@ -82,6 +71,15 @@ void dfs(int raiz , vertice * vertices) {
                 dfs(aux->valor,vertices);
             }
             aux = aux->prox;
+        }
+    }
+}
+
+int check_genero(vertice *vertices, int qtd_vertices) {
+    for (int i = 1; i <= qtd_vertices; i++) {
+        if (vertices[i].visitado == 0) {
+            vertices[i].genero = 0;
+            dfs(i, vertices);
         }
     }
 }
